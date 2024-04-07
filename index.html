@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button class="pdf_button" onclick="generatePDF()">Create PDF Report</button>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+      // the javascript code
+      function generatePDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        const imagePath = "/static/img/pic.png";
+        const imageFormat = "PNG";
+
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const logoWidth = 30;
+        const logoHeight = 20;
+        const margin = 10;
+        const xPosition = pageWidth - logoWidth - margin;
+        const yPosition = margin;
+
+        doc.addImage(imagePath, imageFormat, xPosition, yPosition, logoWidth, logoHeight);
+
+        const userName = "John Doe"; // document.querySelector("text_center").textContent.trim();
+        const superScore = "100"; // document.getElementById("scoreText").getAttribute("data-score");
+        const superDecision = "Yes"; // document.querySelector(".no-factors dd:first-child").textContent;
+        const superRate = "50"; // document.querySelector(".no-factors dd:nth-child(2)").textContent;
+        const advice = "This is some advice"; // document.querySelector(".yes-factors dd:nth-child(2)").textContent;
+
+        doc.setFontSize(12);
+        doc.setFont("Courier");
+        doc.text("This is your Report!", 10, 10);
+        doc.text(`Welcome, ${userName}`, 10, 20);
+        doc.text(`Your Score is: ${superScore} out of 900`, 10, 30);
+        doc.text(`${superDecision}`, 10, 40);
+        doc.text(`Super Rate: ${superRate}`, 10, 50);
+
+        let currentY = 60;
+        doc.setFontSize(10);
+        doc.text("Contributing Factors:", 10, currentY);
+        //shapValues.forEach((value) => {
+        //  currentY += 10;
+        //  doc.text(`${value.factor}: ${value.percentage}%`, 10, currentY);
+        //});
+
+        currentY += 10;
+        doc.text(`Advice: ${advice}`, 10, currentY);
+
+        const safeUserName = userName.replace(/\s+/g, "-");
+        const fileName = `${safeUserName}'s-SuperScore-Report.pdf`;
+        doc.save(fileName);
+      }
+    </script>
+  </body>
+</html>
